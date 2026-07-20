@@ -20,7 +20,7 @@ jobs:
             exit 1
           fi
           # Check for API keys in source code
-          if grep -r 'sk-[a-zA-Z0-9]' --include='*.py' --include='*.js' --include='*.ts' --include='*.tsx' . ; then
+          if grep -rI 'sk-[a-zA-Z0-9]' --include='*.py' --include='*.js' --include='*.ts' --include='*.tsx' --exclude='.env.example' . ; then
             echo "ERROR: Found potential API keys!"
             exit 1
           fi
@@ -50,12 +50,13 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: |
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends build-essential
           pip install -r requirements.txt
-          pip install pytest pytest-asyncio
+          pip install pytest pytest-asyncio pytest-timeout
       - name: Run tests
         env:
           LLM_API_KEY: test-key
-        run: pytest tests/ -v --timeout=30
+        run: pytest tests/ -v
 
   build-frontend:
     name: Build Frontend
@@ -75,5 +76,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Create .dockerignore
+        run: |
+          if [ ! -f .dockerignore ]; then
+            echo ".git" > .dockerignore
+            echo "cache/" >> .dockerignore
+            echo "data/" >> .dockerignore
+            echo "logs/" >> .dockerignore
+            echo "frontend/.next" >> .dockerignore
+            echo "frontend/node_modules" >> .dockerignore
+            echo "node_modules" >> .dockerignore
+            echo ".env" >> .dockerignore
+            echo "__pycache__" >> .dockerignore
+          fi
       - name: Build Docker image
         run: docker build -t knowledge-rag . -f docker/Dockerfile

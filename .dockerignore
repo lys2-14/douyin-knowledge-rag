@@ -1,0 +1,12 @@
+﻿.git
+cache/
+data/
+logs/
+frontend/.next
+frontend/node_modules
+node_modules
+.env
+__pycache__
+.pytest_cache
+.gitignore
+.env.example
