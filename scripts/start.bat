@@ -1,0 +1,3 @@
+﻿@echo off
+echo Starting Knowledge RAG backend...
+python -m backend.main

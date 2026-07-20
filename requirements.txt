@@ -1,0 +1,45 @@
+﻿# Web framework
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+httpx==0.27.2
+
+# Database
+sqlalchemy==2.0.35
+aiosqlite==0.20.0
+
+# LangChain (optional, used for streaming compatibility)
+langchain==0.3.7
+langchain-community==0.3.7
+
+# Vector store
+chromadb==0.5.15
+numpy>=1.24.0
+
+# OpenAI-compatible SDK
+openai==1.59.7
+
+# DashScope SDK (ASR + Embedding + LLM)
+dashscope==1.20.0
+
+# Settings & validation
+pydantic==2.9.2
+pydantic-settings==2.5.2
+python-dotenv==1.0.1
+
+# Logging
+loguru==0.7.2
+
+# QR code (for future multi-platform login)
+qrcode[pil]==7.4.2
+
+# Browser automation for Douyin API (primary provider)
+DrissionPage>=4.0.0
+
+# Local embedding (offline, no API key needed)
+sentence-transformers>=2.2.0
+
+# ASR local fallback (optional)
+faster-whisper>=1.0.0
+
+# System dependency (required for audio handling)
+# ffmpeg — install separately and add to PATH

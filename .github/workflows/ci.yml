@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  privacy-check:
+    name: Privacy Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for secrets in code
+        run: |
+          # Ensure no .env file was committed
+          if [ -f .env ]; then
+            echo "ERROR: .env file should not be committed!"
+            exit 1
+          fi
+          # Check for API keys in source code
+          if grep -r 'sk-[a-zA-Z0-9]' --include='*.py' --include='*.js' --include='*.ts' --include='*.tsx' . ; then
+            echo "ERROR: Found potential API keys!"
+            exit 1
+          fi
+          echo "Privacy check passed"
+
+  lint:
+    name: Lint Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install ruff
+      - name: Run ruff
+        run: ruff check backend/
+
+  test-backend:
+    name: Test Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio
+      - name: Run tests
+        env:
+          LLM_API_KEY: test-key
+        run: pytest tests/ -v --timeout=30
+
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        run: cd frontend && npm ci
+      - name: Build
+        run: cd frontend && npm run build
+
+  docker-build:
+    name: Docker Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t knowledge-rag . -f docker/Dockerfile
