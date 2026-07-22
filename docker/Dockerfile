@@ -1,10 +1,10 @@
-﻿FROM python:3.12-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
 # System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ffmpeg build-essential \
+    ffmpeg build-essential python3-dev \\
     && rm -rf /var/lib/apt/lists/*
 
 # Python deps
