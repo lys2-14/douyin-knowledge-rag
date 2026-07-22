@@ -4,12 +4,12 @@ WORKDIR /app
 
 # System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ffmpeg build-essential python3-dev \\
+    ffmpeg build-essential python3-dev libgomp1 \\
     && rm -rf /var/lib/apt/lists/*
 
 # Python deps
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
 
 # App code
 COPY . .
