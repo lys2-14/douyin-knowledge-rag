@@ -1,4 +1,4 @@
-# Web framework
+ï»¿# Web framework
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
 httpx==0.27.2
@@ -12,6 +12,8 @@ langchain==0.3.7
 langchain-community==0.3.7
 
 # Vector store
+pydantic==2.9.2
+pydantic-settings==2.5.2
 chromadb==0.5.15
 numpy>=1.24.0
 
@@ -22,8 +24,6 @@ openai==1.59.7
 dashscope==1.20.0
 
 # Settings & validation
-pydantic==2.9.2
-pydantic-settings==2.5.2
 python-dotenv==1.0.1
 
 # Logging
@@ -42,4 +42,5 @@ sentence-transformers>=2.2.0
 faster-whisper>=1.0.0
 
 # System dependency (required for audio handling)
-# ffmpeg ¡ª install separately and add to PATH
+# ffmpeg â€” install separately and add to PATH
+

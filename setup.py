@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
-Knowledge RAG — 一键安装配置脚本
-跨平台可用 (Windows / macOS / Linux)
+Knowledge RAG 鈥?涓€閿畨瑁呴厤缃剼鏈?璺ㄥ钩鍙板彲鐢?(Windows / macOS / Linux)
 """
 from __future__ import annotations
 
@@ -19,8 +18,7 @@ RED = "\033[91m"
 CYAN = "\033[96m"
 RESET = "\033[0m"
 
-# Windows 下 ANSI 可能不支持
-if sys.platform == "win32":
+# Windows 涓?ANSI 鍙兘涓嶆敮鎸?if sys.platform == "win32":
     import ctypes
     kernel32 = ctypes.windll.kernel32
     kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
@@ -39,7 +37,7 @@ def prompt(text: str, default: str = "") -> str:
 
 def run(cmd: list[str], desc: str = "", cwd: str | None = None) -> bool:
     if desc:
-        print(f"  → {desc}...", end=" ", flush=True)
+        print(f"  鈫?{desc}...", end=" ", flush=True)
     try:
         subprocess.run(cmd, cwd=cwd or str(ROOT), check=True,
                        capture_output=True, text=True)
@@ -64,56 +62,56 @@ def check_installed(name: str, cmd: list[str]) -> bool:
 
 def main():
     echo("=" * 55, CYAN)
-    echo("  📚 Knowledge RAG — 安装配置向导", CYAN)
+    echo("  馃摎 Knowledge RAG 鈥?瀹夎閰嶇疆鍚戝", CYAN)
     echo("=" * 55, CYAN)
     print()
 
-    # ── 0. 环境检查 ──────────────────────────────────────────────────
-    echo("【0/5】环境检查")
+    # 鈹€鈹€ 0. 鐜妫€鏌?鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+    echo("銆?/5銆戠幆澧冩鏌?)
 
     py_ok = check_installed("python3", [sys.executable, "--version"])
     if not py_ok:
-        echo("  ❌ Python 未安装，请先安装 Python 3.10+", RED)
+        echo("  鉂?Python 鏈畨瑁咃紝璇峰厛瀹夎 Python 3.10+", RED)
         sys.exit(1)
-    echo(f"  ✅ Python {sys.version.split()[0]}", GREEN)
+    echo(f"  鉁?Python {sys.version.split()[0]}", GREEN)
 
     pip_ok = run([sys.executable, "-m", "pip", "--version"], "pip")
     if not pip_ok:
-        echo("  ⚠️  pip 不可用，尝试安装...", YELLOW)
+        echo("  鈿狅笍  pip 涓嶅彲鐢紝灏濊瘯瀹夎...", YELLOW)
         run([sys.executable, "-m", "ensurepip", "--upgrade"])
 
     has_ffmpeg = check_installed("ffmpeg", ["ffmpeg", "-version"])
     if has_ffmpeg:
-        echo("  ✅ ffmpeg", GREEN)
+        echo("  鉁?ffmpeg", GREEN)
     else:
-        echo("  ⚠️  ffmpeg 未找到 (音频处理需要，可稍后安装)", YELLOW)
+        echo("  鈿狅笍  ffmpeg 鏈壘鍒?(闊抽澶勭悊闇€瑕侊紝鍙◢鍚庡畨瑁?", YELLOW)
 
     has_node = check_installed("node", ["node", "--version"])
     has_npm = check_installed("npm", ["npm", "--version"])
     if has_node and has_npm:
         node_v = subprocess.run(["node", "--version"], capture_output=True, text=True).stdout.strip()
-        echo(f"  ✅ Node {node_v}", GREEN)
+        echo(f"  鉁?Node {node_v}", GREEN)
     else:
-        echo("  ⚠️  Node.js 未安装 (前端需要，可稍后安装)", YELLOW)
+        echo("  鈿狅笍  Node.js 鏈畨瑁?(鍓嶇闇€瑕侊紝鍙◢鍚庡畨瑁?", YELLOW)
 
     print()
 
-    # ── 1. 配置 .env ────────────────────────────────────────────────
-    echo("【1/5】API 配置")
+    # 鈹€鈹€ 1. 閰嶇疆 .env 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+    echo("銆?/5銆慉PI 閰嶇疆")
 
     env_path = ROOT / ".env"
     env_example = ROOT / ".env.example"
 
     if env_path.exists():
-        echo("  ✅ .env 已存在，跳过", GREEN)
+        echo("  鉁?.env 宸插瓨鍦紝璺宠繃", GREEN)
     elif env_example.exists():
         shutil.copy(str(env_example), str(env_path))
-        echo("  ✅ 已从 .env.example 创建 .env", GREEN)
+        echo("  鉁?宸蹭粠 .env.example 鍒涘缓 .env", GREEN)
     else:
-        echo("  ℹ️  未找到 .env.example，手动创建空配置", YELLOW)
+        echo("  鈩癸笍  鏈壘鍒?.env.example锛屾墜鍔ㄥ垱寤虹┖閰嶇疆", YELLOW)
         env_path.write_text("")
 
-    # 提示输入 API Key
+    # 鎻愮ず杈撳叆 API Key
     current_key = ""
     if env_path.exists():
         for line in env_path.read_text().splitlines():
@@ -121,11 +119,11 @@ def main():
                 current_key = line.split("=", 1)[1].strip()
                 break
 
-    if not current_key or current_key == "sk-your-api-key":
-        echo("\n  🔑 需要配置 LLM API Key")
-        echo("     推荐使用阿里云百炼 (DashScope) 或 OpenAI 兼容接口")
-        echo("     注册地址: https://bailian.console.aliyun.com/")
-        key = prompt("  请输入你的 API Key", "")
+    if not current_key or current_key == "YOUR_API_KEY_HERE":
+        echo("\n  馃攽 闇€瑕侀厤缃?LLM API Key")
+        echo("     鎺ㄨ崘浣跨敤闃块噷浜戠櫨鐐?(DashScope) 鎴?OpenAI 鍏煎鎺ュ彛")
+        echo("     娉ㄥ唽鍦板潃: https://bailian.console.aliyun.com/")
+        key = prompt("  璇疯緭鍏ヤ綘鐨?API Key", "")
         if key:
             # Update .env
             lines = env_path.read_text().splitlines() if env_path.exists() else []
@@ -138,12 +136,12 @@ def main():
             if not found:
                 lines.append(f"LLM_API_KEY={key}")
             env_path.write_text("\n".join(lines))
-            echo("  ✅ API Key 已保存", GREEN)
+            echo("  鉁?API Key 宸蹭繚瀛?, GREEN)
 
     print()
 
-    # ── 2. 安装 Python 依赖 ─────────────────────────────────────────
-    echo("【2/5】安装 Python 依赖")
+    # 鈹€鈹€ 2. 瀹夎 Python 渚濊禆 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+    echo("銆?/5銆戝畨瑁?Python 渚濊禆")
     req = ROOT / "requirements.txt"
     if req.exists():
         ok = run(
@@ -151,21 +149,21 @@ def main():
             "pip install -r requirements.txt"
         )
         if not ok:
-            echo("  ⚠️  部分依赖安装失败，可稍后手动重试", YELLOW)
+            echo("  鈿狅笍  閮ㄥ垎渚濊禆瀹夎澶辫触锛屽彲绋嶅悗鎵嬪姩閲嶈瘯", YELLOW)
     else:
-        echo("  ⚠️  未找到 requirements.txt", YELLOW)
+        echo("  鈿狅笍  鏈壘鍒?requirements.txt", YELLOW)
 
     print()
 
-    # ── 3. 安装前端依赖 ─────────────────────────────────────────────
-    echo("【3/5】安装前端依赖")
+    # 鈹€鈹€ 3. 瀹夎鍓嶇渚濊禆 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+    echo("銆?/5銆戝畨瑁呭墠绔緷璧?)
     if has_node and has_npm:
         frontend_dir = ROOT / "frontend"
         if (frontend_dir / "package.json").exists():
-            # 检测中国大陆网络，使用淘宝镜像
+            # 妫€娴嬩腑鍥藉ぇ闄嗙綉缁滐紝浣跨敤娣樺疂闀滃儚
             npmrc = frontend_dir / ".npmrc"
             if not npmrc.exists():
-                echo("  ℹ️  检测到中国大陆网络，使用淘宝镜像加速", YELLOW)
+                echo("  鈩癸笍  妫€娴嬪埌涓浗澶ч檰缃戠粶锛屼娇鐢ㄦ窐瀹濋暅鍍忓姞閫?, YELLOW)
                 npmrc.write_text("registry=https://registry.npmmirror.com/\n")
 
             ok = run(
@@ -174,47 +172,47 @@ def main():
                 cwd=str(frontend_dir),
             )
             if not ok:
-                echo("  ⚠️  前端依赖安装失败，可稍后 cd frontend && npm install", YELLOW)
+                echo("  鈿狅笍  鍓嶇渚濊禆瀹夎澶辫触锛屽彲绋嶅悗 cd frontend && npm install", YELLOW)
     else:
-        echo("  ⚠️  Node.js 未安装，跳过前端 (可稍后安装)", YELLOW)
+        echo("  鈿狅笍  Node.js 鏈畨瑁咃紝璺宠繃鍓嶇 (鍙◢鍚庡畨瑁?", YELLOW)
 
     print()
 
-    # ── 4. 创建数据目录 ─────────────────────────────────────────────
-    echo("【4/5】创建数据目录")
+    # 鈹€鈹€ 4. 鍒涘缓鏁版嵁鐩綍 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+    echo("銆?/5銆戝垱寤烘暟鎹洰褰?)
     for d in ["data", "logs", "cache/audio", "cache/transcript", "cache/thumbnails"]:
         (ROOT / d).mkdir(parents=True, exist_ok=True)
-    echo("  ✅ 目录已创建", GREEN)
+    echo("  鉁?鐩綍宸插垱寤?, GREEN)
 
     print()
 
-    # ── 5. 完成 ─────────────────────────────────────────────────────
-    echo("【5/5】安装完成!", GREEN)
+    # 鈹€鈹€ 5. 瀹屾垚 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+    echo("銆?/5銆戝畨瑁呭畬鎴?", GREEN)
     print()
     echo("=" * 55, CYAN)
-    echo("  启动方式:", CYAN)
+    echo("  鍚姩鏂瑰紡:", CYAN)
     echo("=" * 55, CYAN)
     print()
-    echo("  后端服务:")
+    echo("  鍚庣鏈嶅姟:")
     echo(f"    cd {ROOT}")
     echo("    python -m backend.main")
     print()
-    echo("  前端界面 (新开一个终端):")
+    echo("  鍓嶇鐣岄潰 (鏂板紑涓€涓粓绔?:")
     echo(f"    cd {ROOT}/frontend")
     echo("    npm run dev")
     print()
-    echo("  浏览器打开:")
-    echo("    后端文档: http://127.0.0.1:8000/docs")
-    echo("    前端页面: http://127.0.0.1:3000")
+    echo("  娴忚鍣ㄦ墦寮€:")
+    echo("    鍚庣鏂囨。: http://127.0.0.1:8000/docs")
+    echo("    鍓嶇椤甸潰: http://127.0.0.1:3000")
     print()
-    echo("  登录方式:")
-    echo("    1. 在浏览器打开 douyin.com 并登录")
-    echo("    2. 按 F12 → Network → 刷新页面 → 点任意请求")
-    echo("    3. 复制 Request Headers 里的 Cookie 值")
-    echo("    4. 在登录页面粘贴 Cookie")
+    echo("  鐧诲綍鏂瑰紡:")
+    echo("    1. 鍦ㄦ祻瑙堝櫒鎵撳紑 douyin.com 骞剁櫥褰?)
+    echo("    2. 鎸?F12 鈫?Network 鈫?鍒锋柊椤甸潰 鈫?鐐逛换鎰忚姹?)
+    echo("    3. 澶嶅埗 Request Headers 閲岀殑 Cookie 鍊?)
+    echo("    4. 鍦ㄧ櫥褰曢〉闈㈢矘璐?Cookie")
     print()
-    echo("  需要帮助?:")
-    echo("    https://github.com/你的用户名/knowledge-rag")
+    echo("  闇€瑕佸府鍔?:")
+    echo("    https://github.com/浣犵殑鐢ㄦ埛鍚?knowledge-rag")
     print()
 
 
