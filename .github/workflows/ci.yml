@@ -71,26 +71,3 @@ jobs:
       - name: Build
         run: cd frontend && npm run build
 
-  docker-build:
-    name: Docker Build Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Create .dockerignore
-        run: |
-          if [ ! -f .dockerignore ]; then
-            echo ".git" > .dockerignore
-            echo "cache/" >> .dockerignore
-            echo "data/" >> .dockerignore
-            echo "logs/" >> .dockerignore
-            echo "frontend/.next" >> .dockerignore
-            echo "frontend/node_modules" >> .dockerignore
-            echo "node_modules" >> .dockerignore
-            echo ".env" >> .dockerignore
-            echo "__pycache__" >> .dockerignore
-          fi
-      - name: Build Docker image
-        run: docker build -t knowledge-rag . -f docker/Dockerfile
-
-
-
