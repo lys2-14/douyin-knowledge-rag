@@ -20,7 +20,6 @@ def get_embedding(provider: Optional[str] = None) -> BaseEmbedding:
         from backend.embedding.dashscope import DashScopeEmbedding
         _instance = DashScopeEmbedding()
     elif provider == "openai":
-        from backend.llm.openai import OpenAILLM
         from openai import AsyncOpenAI
         client = AsyncOpenAI(
             base_url=settings.embedding_base_url or settings.llm_base_url or "https://api.openai.com/v1",

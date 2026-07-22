@@ -99,7 +99,8 @@ settings = Settings()
 def ensure_directories() -> None:
     import os
     hf = os.environ.get('HF_ENDPOINT') or os.environ.get('_HF_ENDPOINT') or ''
-    if hf: os.environ.setdefault('HF_ENDPOINT', hf)
+    if hf:
+        os.environ.setdefault('HF_ENDPOINT', hf)
     """Create required runtime directories."""
     import os
     for d in [

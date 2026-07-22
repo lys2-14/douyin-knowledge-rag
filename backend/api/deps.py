@@ -25,7 +25,7 @@ async def get_session(
     result = await db.execute(
         select(UserSession).where(
             UserSession.session_id == x_session_id,
-            UserSession.is_valid == True,
+            UserSession.is_valid,
         )
     )
     sess = result.scalar_one_or_none()

@@ -4,7 +4,7 @@ ChromaDB vector store implementation.
 from __future__ import annotations
 
 import os
-from typing import Any, Optional
+from typing import Optional
 
 import chromadb
 from chromadb.config import Settings as ChromaSettings
@@ -89,7 +89,6 @@ class ChromaStore(BaseVectorStore):
         # Manual MMR
         import numpy as np
 
-        query_vec = np.array(query_emb)
         docs = results["documents"][0]
         metas = results["metadatas"][0]
         ids_list = results["ids"][0]

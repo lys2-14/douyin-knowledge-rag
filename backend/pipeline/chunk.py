@@ -51,7 +51,6 @@ class ChunkStage(PipelineStage):
         return ctx
 
     def _make_metadata(self, ctx: PipelineContext) -> dict:
-        import json
         meta = {
             "platform_video_id": ctx.platform_video_id,
             "platform_folder_id": ctx.platform_folder_id,

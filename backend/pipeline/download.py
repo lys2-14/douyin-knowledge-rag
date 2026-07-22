@@ -5,7 +5,7 @@ Uses the provider's download_audio method.
 from __future__ import annotations
 
 import os
-from backend.pipeline.base import PipelineStage, PipelineContext, StageStatus
+from backend.pipeline.base import PipelineStage, PipelineContext
 from backend.providers import get_provider
 
 

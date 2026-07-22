@@ -4,13 +4,12 @@ Knowledge routes — sync, status, progress.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
-from backend.storage.database import get_db, async_session_factory
+from backend.storage.database import get_db
 from backend.models.orm import UserSession, FavoriteFolder, VideoCache, SyncTask
 from backend.models.schemas import SyncRequest, SyncStatus, KnowledgeStatus
 from backend.api.deps import get_session
@@ -67,7 +66,7 @@ async def get_knowledge_status(
         select(func.count(VideoCache.id))
     )
     processed = await db.scalar(
-        select(func.count(VideoCache.id)).where(VideoCache.is_processed == True)
+        select(func.count(VideoCache.id)).where(VideoCache.is_processed)
     )
     failed = await db.scalar(
         select(func.count(VideoCache.id)).where(VideoCache.process_error.isnot(None))

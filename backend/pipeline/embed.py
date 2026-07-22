@@ -37,7 +37,7 @@ class EmbeddingStage(PipelineStage):
                     clean = {k: v for k, v in m.items() if v is not None and not (isinstance(v, str) and v == "null")}
                     clean_metas.append(clean)
                 await store.add_texts(texts=texts, metadatas=clean_metas, ids=ids)
-                print(f"[embed] Retry succeeded with cleaned metadatas", flush=True)
+                print("[embed] Retry succeeded with cleaned metadatas", flush=True)
             except Exception as e2:
                 print(f"[embed] Retry also failed: {e2}", flush=True)
                 raise

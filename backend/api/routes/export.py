@@ -24,8 +24,8 @@ async def export_markdown(
 ):
     """Export folder contents as Markdown."""
     lines = [
-        f"# 知识库导出",
-        f"> 导出时间: ...",
+        "# 知识库导出",
+        "> 导出时间: ...",
         f"> 平台: {session.provider}",
         "",
     ]
@@ -36,12 +36,12 @@ async def export_markdown(
             continue
 
         lines.append(f"## 📁 {folder.title}")
-        lines.append(f"")
+        lines.append("")
 
         result = await db.execute(
             select(VideoCache).where(
                 VideoCache.platform_folder_id == folder.platform_folder_id,
-                VideoCache.is_processed == True,
+                VideoCache.is_processed,
             )
         )
         videos = result.scalars().all()
@@ -57,12 +57,12 @@ async def export_markdown(
             lines.append("")
 
             if req.include_summary and v.summary:
-                lines.append(f"**摘要**:")
+                lines.append("**摘要**:")
                 lines.append(f"{v.summary}")
                 lines.append("")
 
             if req.include_transcript and v.transcript:
-                lines.append(f"**逐字稿**:")
+                lines.append("**逐字稿**:")
                 lines.append(f"{v.transcript}")
                 lines.append("")
 

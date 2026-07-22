@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from sqlalchemy import (
-    Column, Integer, String, Text, DateTime, Boolean, JSON, Float, BigInteger
+    Column, Integer, String, Text, DateTime, Boolean, JSON
 )
 from sqlalchemy.orm import DeclarativeBase
 

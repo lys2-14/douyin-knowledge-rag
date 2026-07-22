@@ -1,4 +1,4 @@
-"""
+﻿"""
 Application entry point.
 """
 from backend.api.app import create_app
@@ -9,12 +9,13 @@ app = create_app()
 
 @app.get("/api/config/check")
 async def config_check():
-    import os, shutil
+    import os
+    import shutil
     from backend.config.settings import settings
     w = []
     i = {}
     key = settings.llm_api_key or settings.dashscope_api_key or ""
-    if not key or key in ("sk-your-api-key", "sk-your-dashscope-key"):
+    if not key or key in ("YOUR_API_KEY_HERE", "YOUR_DASHSCOPE_KEY_HERE"):
         w.append("LLM_API_KEY not configured")
         i["llm_configured"] = False
     else:

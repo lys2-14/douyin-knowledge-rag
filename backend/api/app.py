@@ -1,4 +1,4 @@
-"""
+﻿"""
 FastAPI application factory.
 """
 from __future__ import annotations
@@ -7,7 +7,6 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from loguru import logger
 import sys
 
@@ -17,14 +16,14 @@ from backend.storage.database import init_db
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info(f"馃殌 {settings.app_name} starting...")
+    logger.info(f"棣冩畬 {settings.app_name} starting...")
     ensure_directories()
     await init_db()
     logger.info("[OK]  Database ready")
     _check_config_warnings()
     yield
     logger.info("Shutdown")
-    logger.info("馃憢 Shutdown")
+    logger.info("棣冩啟 Shutdown")
 
 
 
@@ -37,7 +36,7 @@ def _check_config_warnings() -> None:
     from backend.config.settings import settings
     import shutil
     key = settings.llm_api_key or settings.dashscope_api_key or ""
-    if not key or key in ("sk-your-api-key", "sk-your-dashscope-key"):
+    if not key or key in ("YOUR_API_KEY_HERE", "YOUR_DASHSCOPE_KEY_HERE"):
         print("WARNING: LLM_API_KEY not configured!")
     if shutil.which("ffmpeg") is None:
         print("WARNING: ffmpeg not found!")
@@ -51,10 +50,10 @@ def create_app() -> FastAPI:
 Collect, process and chat with your favourite videos.
 
 ## Providers
-- Douyin (鎶栭煶)
-- More coming鈥?
+- Douyin (閹舵牠鐓?
+- More coming閳?
 ## Pipeline
-Download 鈫?ASR 鈫?Summarize 鈫?Chunk 鈫?Embed 鈫?Vector Store
+Download 閳?ASR 閳?Summarize 閳?Chunk 閳?Embed 閳?Vector Store
 
 ## RAG
 Retrieval-Augmented Generation with multi-model support.
@@ -97,7 +96,7 @@ Retrieval-Augmented Generation with multi-model support.
     @app.get("/")
     async def root():
         return {
-            "message": f"馃摎 {settings.app_name}",
+            "message": f"棣冩憥 {settings.app_name}",
             "version": "0.1.0",
             "docs": "/docs",
             "providers": ["douyin"],

@@ -1,28 +1,29 @@
-﻿[project]
+[project]
 name = "knowledge-rag"
 version = "0.1.0"
 description = "把你的收藏夹变成可对话的知识库"
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = \">=3.10\"
+requires-python = ">=3.10"
 dependencies = [
-    \"fastapi>=0.115.0\",
-    \"uvicorn[standard]\",
-    \"sqlalchemy>=2.0\",
-    \"aiosqlite\",
-    \"httpx\",
-    \"pydantic>=2.0\",
-    \"pydantic-settings\",
-    \"python-dotenv\",
-    \"loguru\",
-    \"openai\",
-    \"chromadb>=0.5.0\",
-    \"dashscope\",
-    \"numpy\",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]",
+    "sqlalchemy>=2.0",
+    "aiosqlite",
+    "httpx",
+    "pydantic>=2.0",
+    "pydantic-settings",
+    "python-dotenv",
+    "loguru",
+    "openai",
+    "chromadb>=0.5.0",
+    "dashscope",
+    "numpy",
 ]
 
 [tool.setuptools.packages.find]
-include = [\"backend*\"]
+include = ["backend*"]
 
 [project.urls]
-Homepage = \"https://github.com/你的用户名/knowledge-rag\"
+Homepage = "https://github.com/lys2-14/douyin-knowledge-rag"
+

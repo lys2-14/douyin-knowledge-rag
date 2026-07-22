@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from typing import AsyncIterator, Optional
 
-from backend.config.settings import settings
 from backend.rag.retriever import Retriever
 from backend.rag.prompt import RAG_SYSTEM_PROMPT, QA_PROMPT, QUERY_REWRITE_PROMPT
 from backend.llm import get_llm

@@ -1,4 +1,5 @@
 """Provider registry - factor out the right provider by name."""
+from backend.providers.douyin.provider_playwright import DouyinPlaywrightProvider
 from backend.providers.base import BaseProvider
 
 _registry: dict[str, type[BaseProvider]] = {}
@@ -15,7 +16,5 @@ def get_provider(name: str, **kwargs) -> BaseProvider:
 def list_providers() -> list[str]:
     return list(_registry)
 
-# Register Playwright provider
-from backend.providers.douyin.provider_playwright import DouyinPlaywrightProvider
 register_provider("douyin", DouyinPlaywrightProvider)
 print("[providers] Using Playwright Edge provider")

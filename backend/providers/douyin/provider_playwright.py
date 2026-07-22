@@ -121,9 +121,12 @@ class DouyinPlaywrightProvider(BaseProvider):
 
     async def _close_browser(self):
         try:
-            if self._context: await self._context.close()
-            if self._browser: await self._browser.close()
-            if self._pw: await self._pw.close()
+            if self._context:
+                await self._context.close()
+            if self._browser:
+                await self._browser.close()
+            if self._pw:
+                await self._pw.close()
         except Exception:
             pass
         self._context = None
@@ -281,7 +284,7 @@ class DouyinPlaywrightProvider(BaseProvider):
             if not session_cookies:
                 try:
                     page_url = self._page.url
-                except:
+                except Exception:
                     page_url = ""
                 await self._close_browser()
                 raise RuntimeError(f"Cookie 验证失败：未找到登录会话。当前页面: {page_url}")
@@ -348,9 +351,6 @@ class DouyinPlaywrightProvider(BaseProvider):
     async def get_audio_url(self, video_id: str, session_creds: str) -> Optional[str]:
         return None
 
-    async def download_audio(self, video_id: str, session_creds: str, target_path: str) -> Optional[str]:
-        return None
-
     def _cache_result(self, result: dict):
         self._snapshot_cache = {
             "collections": result.get("collections", []),
@@ -363,7 +363,8 @@ class DouyinPlaywrightProvider(BaseProvider):
         folders = []
         for c in raw:
             cid = str(c.get("collectionFolderId") or "").strip()
-            if not cid: continue
+            if not cid:
+                continue
             folders.append(FolderInfo(
                 platform_folder_id=cid,
                 title=str(c.get("collectionFolderName") or "收藏夹")[:255],
@@ -377,7 +378,8 @@ class DouyinPlaywrightProvider(BaseProvider):
         videos = []
         for row in rows:
             aid = str(row.get("awemeId") or "").strip()
-            if not aid: continue
+            if not aid:
+                continue
             videos.append(VideoInfo(
                 platform_video_id=aid,
                 title=str(row.get("title") or "Untitled")[:500],
@@ -389,17 +391,23 @@ class DouyinPlaywrightProvider(BaseProvider):
 
     @staticmethod
     def _dur(raw) -> Optional[int]:
-        if raw is None: return None
-        try: d = int(raw)
-        except (TypeError, ValueError): return None
-        if d <= 0: return None
+        if raw is None:
+            return None
+        try:
+            d = int(raw)
+        except (TypeError, ValueError):
+            return None
+        if d <= 0:
+            return None
         return d // 1000 if d > 1000 else d
 
 
 
     def _generate_cookie_file(self) -> str:
         """Convert Playwright saved state to a Netscape cookie file for yt-dlp."""
-        import os, json, tempfile
+        import os
+        import json
+        import tempfile
         from pathlib import Path
         state_path = Path(__file__).resolve().parent.parent.parent.parent / "data" / "playwright_state.json"
         if not state_path.exists():
@@ -420,11 +428,13 @@ class DouyinPlaywrightProvider(BaseProvider):
             f.write("# Netscape HTTP Cookie File\n")
             f.write("# Generated from Playwright storage state\n")
             for c in cookies:
-                if not isinstance(c, dict): continue
+                if not isinstance(c, dict):
+                    continue
                 domain = str(c.get("domain") or "").strip()
                 name = str(c.get("name") or "").strip()
                 value = str(c.get("value") or "")
-                if not domain or not name: continue
+                if not domain or not name:
+                    continue
                 sub = "TRUE" if domain.startswith(".") else "FALSE"
                 cpath = str(c.get("path") or "/")
                 secure = "TRUE" if bool(c.get("secure")) else "FALSE"

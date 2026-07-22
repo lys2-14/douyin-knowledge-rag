@@ -6,9 +6,8 @@ from __future__ import annotations
 
 import json
 import os
-from typing import Optional
 
-from backend.pipeline.base import PipelineStage, PipelineContext, StageStatus
+from backend.pipeline.base import PipelineStage, PipelineContext
 from backend.config.settings import settings
 
 
@@ -51,7 +50,7 @@ class ASRStage(PipelineStage):
     ) -> None:
         """Use DashScope paraformer for ASR."""
         import dashscope
-        from dashscope.audio.asr import Recognition, RecognitionResult
+        from dashscope.audio.asr import Recognition
 
         dashscope.api_key = settings.dashscope_api_key or settings.llm_api_key
 
